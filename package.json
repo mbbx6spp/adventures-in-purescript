@@ -1,0 +1,16 @@
+{
+  "name": "adventures-in-purescript",
+  "version": "1.0.0",
+  "description": "Code supplementing Adventures in PureScript",
+  "main": "index.js",
+  "directories": {
+    "doc": "doc",
+    "test": "test"
+  },
+  "scripts": {
+    "@build": "find . -name \"*.purs\" -o -name \"*.js\" | entr -s 'spago build'",
+    "@test": "find . -name \"*.purs\" -o -name \"*.js\" | entr -s 'spago test'"
+  },
+  "author": "Susan Potter <me+oss@susanpotter.net> (https://susanpotter.net/)",
+  "license": "UNLICENSED"
+}
