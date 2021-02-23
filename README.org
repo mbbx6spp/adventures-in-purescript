@@ -1,0 +1,26 @@
+* Adventures in PureScript
+
+
+** Running examples
+
+Supported developer environment assumes Nix and direnv is installed:
+- after cloning this Git repository, enter the root directory
+- copy the sample =.env= located at =.env.sample= to =.env=
+- run =direnv allow=
+- wait (bootstrapping may take some time)
+- after loading Nix shell, run =npm install && spago build=
+
+To continuously typecheck the examples and build on file change run
+=npm run @build=.
+
+To enter the REPL run =spago repl=.
+
+** Environment (Versions)
+
+|---------+---------+------------------------------------------------------|
+| Tool    | Version | Purpose                                              |
+|---------+---------+------------------------------------------------------|
+| =purs=  |  0.13.8 | PureScript compiler                                  |
+| =spago= |  0.16.0 | PureScript dependency manager and convenient builder |
+| =node=  | v14.9.0 | Node.js to run examples and run the REPL             |
+|---------+---------+------------------------------------------------------|
