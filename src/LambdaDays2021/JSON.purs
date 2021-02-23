@@ -1,24 +1,15 @@
 module LambdaDays2021.JSON where
 
 import Prelude
-import Control.Applicative (pure)
-import Control.Category ((<<<))
-import Control.Monad ((>>=))
-import Data.Semigroup ((<>))
 import Data.Bifunctor (lmap)
-import Data.Either (Either (..))
-import Data.Function (($))
+import Data.Either (Either)
 import Data.Maybe (Maybe (..))
-import Data.Show (class Show, show)
 import Data.Argonaut.Core as JSON
 import Data.Argonaut.Parser as AP
 import Data.Codec.Argonaut as CA
 import Data.Codec as DC
 import Data.Codec.Argonaut.Record as CAR
 import Data.Codec.Argonaut.Sum as CAS
-import Effect (Effect)
-import Control.Monad.Trans.Class (lift)
-import Effect.Console as Console
 
 data JsonError = ParseError String | DecodeError String
 
@@ -26,7 +17,7 @@ instance showJsonError :: Show JsonError where
   show (ParseError s)  = "ParseError: "  <> s
   show (DecodeError s) = "DecodeError: " <> s
 
-data SubscriptionStatus = Trailing
+data SubscriptionStatus = Trialing
                         | Active
                         | Incomplete
                         | IncompleteExpired
@@ -35,7 +26,7 @@ data SubscriptionStatus = Trailing
                         | Unpaid
 
 instance showSubscriptionStatus :: Show SubscriptionStatus where
-  show Trailing          = "trailing"
+  show Trialing          = "trialing"
   show Active            = "active"
   show Incomplete        = "incomplete"
   show IncompleteExpired = "incomplete_expired"
@@ -49,7 +40,7 @@ subscriptionStatusCodec = CAS.enumSum encoder decoder
        encoder = show
 
        decoder :: String -> Maybe SubscriptionStatus
-       decoder "trailing"           = Just Trailing
+       decoder "trialing"           = Just Trialing
        decoder "active"             = Just Active
        decoder "incomplete"         = Just Incomplete
        decoder "incomplete_expired" = Just IncompleteExpired
