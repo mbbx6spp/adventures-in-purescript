@@ -1,4 +1,5 @@
-{ pkgs ? import ./nixpkgs.nix }:
+{ pkgs ? import ./nixpkgs.nix
+, presenterMode ? builtins.getEnv "MBBX6SPP_PRESENTER" }:
 let
   inherit (pkgs) mkShell spago purescript aws-sam-cli nodejs-14_x entr texlive pdfpc pythonPackages graphviz beamerpresenter;
   texliveEnv = texlive.combine {
@@ -11,17 +12,18 @@ let
       beamertheme-focus beamerdarkthemes beamercolorthemeowl adjustbox xkeyval
       collectbox metalogo fontawesome catchfile emoji;
   };
-in mkShell {
-  buildInputs = [
-    nodejs-14_x
-    spago
-    purescript
-    aws-sam-cli
-    entr
+  presenterTools = [
     texliveEnv
     pdfpc
     pythonPackages.pygments
     graphviz
     beamerpresenter
   ];
+in mkShell {
+  buildInputs = [
+    nodejs-14_x
+    spago
+    purescript
+    entr
+  ] ++ (if presenterMode == "true" then presenterTools else []);
 }
