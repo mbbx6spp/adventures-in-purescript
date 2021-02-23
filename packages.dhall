@@ -78,34 +78,23 @@ in  upstream
 
 Example:
 -------------------------------
-let upstream = --
-in  upstream
-  with benchotron =
-      { dependencies =
-          [ "arrays"
-          , "exists"
-          , "profunctor"
-          , "strings"
-          , "quickcheck"
-          , "lcg"
-          , "transformers"
-          , "foldable-traversable"
-          , "exceptions"
-          , "node-fs"
-          , "node-buffer"
-          , "node-readline"
-          , "datetime"
-          , "now"
-          ]
-      , repo =
-          "https://github.com/hdgarrood/purescript-benchotron.git"
-      , version =
-          "v7.0.0"
-      }
--------------------------------
 -}
 
 let upstream =
       https://github.com/purescript/package-sets/releases/download/psc-0.13.8-20210118/packages.dhall sha256:a59c5c93a68d5d066f3815a89f398bcf00e130a51cb185b2da29b20e2d8ae115
 
-in  upstream
+let overrides =
+  { nonbili-postgres =
+      { dependencies =
+          [ "effect"
+          , "aff-promise"
+          , "argonaut-codecs"
+          ]
+      , repo =
+          "https://github.com/nonbili/purescript-nonbili-postgres.git"
+      , version =
+          "v0.2.0"
+      }
+  }
+
+in  upstream // overrides

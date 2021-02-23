@@ -11,3 +11,8 @@
 .spago/
 output/
 node_modules/
+*.pdf
+*.tex
+doc/_minted-*/
+doc/
+images/
