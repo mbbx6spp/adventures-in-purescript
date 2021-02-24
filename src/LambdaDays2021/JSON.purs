@@ -8,6 +8,8 @@ import Data.Argonaut.Core as JSON
 import Data.Argonaut.Parser as AP
 import Data.Codec.Argonaut as CA
 import Data.Codec as DC
+import Data.Codec ((>~>))
+import Data.Codec.Argonaut.Migration as CAM
 import Data.Codec.Argonaut.Record as CAR
 import Data.Codec.Argonaut.Sum as CAS
 
@@ -136,6 +138,43 @@ invalidSubscriptionJson2 = """
 }
 """
 
+invalidSubscriptionJson3 :: String
+invalidSubscriptionJson3 = """
+ {
+  "event_id": "abcdef",
+  "object": "subscription",
+  "status": "unpaid",
+  "latest_invoice": {
+    "id": "in_EmGqfJMYy3Nt9M",
+    "status": "open"
+  }
+}
+"""
+
+invalidSubscriptionJson4 :: String
+invalidSubscriptionJson4 = """
+ {
+  "object": "subscription",
+  "status": "unpaid",
+  "latest_invoice": {
+    "id": "in_EmGqfJMYy3Nt9M",
+    "status": "open"
+  }
+}
+"""
+
+-- Migrations / Patches
+
+-- >>> parse invalidSubscriptionJson3 >>= decode patchedCodec1
+patchedCodec1
+  = CAM.renameField "event_id" "id"
+    >~> subscriptionEventCodec
+
+-- >>> parse invalidSubscriptionJson4 >>= decode patchedCodec2
+patchedCodec2
+  = CAM.addDefaultField "id" JSON.jsonEmptyString
+    >~> subscriptionEventCodec
+
 -- Usage
 
 parse :: String -> Either JsonError JSON.Json
@@ -150,11 +189,21 @@ decode codec json = lmap toDecodeError dec
   where toDecodeError = DecodeError <<< show
         dec = DC.decode codec json
 
-encode :: forall a. CA.JsonCodec a -> a -> Either JsonError JSON.Json
+encode
+  :: forall a
+   . CA.JsonCodec a
+  -> a
+  -> Either JsonError JSON.Json
 encode codec = pure <<< DC.encode codec
 
-stringify :: JSON.Json -> Either JsonError String
+stringify
+  :: JSON.Json
+  -> Either JsonError String
 stringify = pure <<< JSON.stringify
 
-roundtrip :: forall a. CA.JsonCodec a -> String -> Either JsonError String
+roundtrip
+  :: forall a
+   . CA.JsonCodec a
+  -> String
+  -> Either JsonError String
 roundtrip codec json = parse json >>= decode codec >>= encode codec >>= stringify
