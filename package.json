@@ -12,5 +12,8 @@
     "@test": "find . -name \"*.purs\" -o -name \"*.js\" | entr -s 'spago test'"
   },
   "author": "Susan Potter <me+oss@susanpotter.net> (https://susanpotter.net/)",
-  "license": "UNLICENSED"
+  "license": "UNLICENSED",
+  "dependencies": {
+    "aws-sdk": "2.850.0"
+  }
 }

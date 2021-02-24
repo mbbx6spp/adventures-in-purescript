@@ -5,5 +5,4 @@ import ((import <nixpkgs> { }).fetchFromGitHub {
     sha256 = "026r951mmiw446q5m4jgx98icz97inv44khkg9dkk0hfxy78hj62";
 }) {
   config.allowUnfree = true;
-  #overlays = import ../overlays;
 }
